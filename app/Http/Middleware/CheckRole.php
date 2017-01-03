@@ -1,9 +1,9 @@
 <?php
 
-namespace CodeDeliveryHttpMiddleware;
+namespace CodeDelivery\Http\Middleware;
 
 use Closure;
-use IlluminateSupportFacadesAuth;
+use Illuminate\Support\Facades\Auth;
 
 class CheckRole
 {
