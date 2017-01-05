@@ -46,7 +46,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth.checkrole:admin', 'as' 
     Route::post('cupoms/store', ['as' => 'cupoms.store', 'uses' => 'CupomsController@store']);
 });
 
-Route::group(['prefix' => 'customer', 'middleware' => 'auth.checkrole:client', 'as' => 'customer.'], function () {
+Route::group(['prefix' => 'customer', 'middleware' => 'auth.checkrole:Client', 'as' => 'customer.'], function () {
     Route::get('order', ['as' => 'order.index', 'uses' => 'CheckoutController@index']);
     Route::get('order/create', ['as' => 'order.create', 'uses' => 'CheckoutController@create']);
     Route::post('order/store', ['as' => 'order.store', 'uses' => 'CheckoutController@store']);
@@ -58,11 +58,16 @@ Route::post('oauth/access_token', function () {
 
 Route::group(['prefix' => 'api', 'middleware' => 'oauth', 'as' => 'api.'], function () {
 
-    Route::group(['prefix' => 'client', 'middleware' => 'oauth.checkrole:client','as' => 'client.'], function () {
+    Route::group(['prefix' => 'client', 'middleware' => 'oauth.checkrole:Client','as' => 'client.'], function () {
+        Route::resource('order',
+            'Api\Client\ClientCheckoutController',
+            ['except' => ['create', 'edit', 'destroy']]
+        );
+
         Route::get('pedidos', function () {
             return [
                 'id' => 1,
-                'client' => 'Yuri Pinzetta - Cliente',
+                'Client' => 'Yuri Pinzetta - Cliente',
                 'total' => 10
             ];
         });
@@ -72,7 +77,7 @@ Route::group(['prefix' => 'api', 'middleware' => 'oauth', 'as' => 'api.'], funct
         Route::get('pedidos', function () {
             return [
                 'id' => 1,
-                'client' => 'Yuri Pinzetta - Entregador',
+                'Client' => 'Yuri Pinzetta - Entregador',
                 'total' => 10
             ];
         });
@@ -81,7 +86,7 @@ Route::group(['prefix' => 'api', 'middleware' => 'oauth', 'as' => 'api.'], funct
     Route::get('teste', function () {
         return [
             'id' => 1,
-            'client' => 'Yuri Pinzetta',
+            'Client' => 'Yuri Pinzetta',
             'total' => 10
         ];
     });
