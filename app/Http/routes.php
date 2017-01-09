@@ -57,6 +57,10 @@ Route::post('oauth/access_token', function () {
 });
 
 Route::group(['prefix' => 'api', 'middleware' => 'oauth', 'as' => 'api.'], function () {
+    Route::resource('authenticated',
+        'Api\User\UserCheckoutController',
+        ['except' => ['create', 'edit', 'destroy']]
+    );
 
     Route::group(['prefix' => 'client', 'middleware' => 'oauth.checkrole:client','as' => 'client.'], function () {
         Route::resource('order',
@@ -83,11 +87,4 @@ Route::group(['prefix' => 'api', 'middleware' => 'oauth', 'as' => 'api.'], funct
         });
     });
 
-    Route::get('teste', function () {
-        return [
-            'id' => 1,
-            'Client' => 'Yuri Pinzetta',
-            'total' => 10
-        ];
-    });
 });
