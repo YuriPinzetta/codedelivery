@@ -26,10 +26,10 @@ class UserCheckoutController extends Controller
     public function index()
     {
         $id = Authorizer::getResourceOwnerId();
-        $user = $this->repository->find($id);
-//        $orders = $this->repository->with(['items'])->scopeQuery(function ($query) use($clientId){
-//            return $query->where('client_id', '=', $clientId);
-//        })->paginate();
+//        $user = $this->repository->find($id);
+        $user = $this->repository->with(['client'])->scopeQuery(function ($query) use($id){
+            return $query->where('id', '=', $id);
+        })->paginate();
 
         return $user;
     }
