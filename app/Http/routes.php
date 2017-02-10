@@ -46,7 +46,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth.checkrole:admin', 'as' 
     Route::post('cupoms/store', ['as' => 'cupoms.store', 'uses' => 'CupomsController@store']);
 });
 
-Route::group(['prefix' => 'customer', 'middleware' => 'auth.checkrole:Client', 'as' => 'customer.'], function () {
+Route::group(['prefix' => 'customer', 'middleware' => 'auth.checkrole:client', 'as' => 'customer.'], function () {
     Route::get('order', ['as' => 'order.index', 'uses' => 'CheckoutController@index']);
     Route::get('order/create', ['as' => 'order.create', 'uses' => 'CheckoutController@create']);
     Route::post('order/store', ['as' => 'order.store', 'uses' => 'CheckoutController@store']);
@@ -78,6 +78,17 @@ Route::group(['prefix' => 'api', 'middleware' => 'oauth', 'as' => 'api.'], funct
     });
 
     Route::group(['prefix' => 'deliveryman', 'middleware' => 'oauth.checkrole:deliveryman', 'as' => 'deliveryman.'], function () {
+        Route::resource('order',
+            'Api\Deliveryman\DeliverymanCheckoutController',
+            ['except' => ['create', 'edit', 'destroy', 'store']]
+        );
+        Route::patch('order/{id}/update-status',
+            [
+                'uses' => 'Api\Deliveryman\DeliverymanCheckoutController@updateStatus',
+                'as' => 'orders.update_status'
+            ]
+        );
+
         Route::get('pedidos', function () {
             return [
                 'id' => 1,

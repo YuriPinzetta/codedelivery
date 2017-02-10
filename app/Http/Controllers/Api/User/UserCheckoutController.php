@@ -15,6 +15,8 @@ class UserCheckoutController extends Controller
 {
     private $repository;
 
+    private $with = ['client'];
+
     public function __construct
     (
         UserRepository $repository
@@ -27,7 +29,7 @@ class UserCheckoutController extends Controller
     {
         $id = Authorizer::getResourceOwnerId();
 //        $user = $this->repository->find($id);
-        $user = $this->repository->with(['client'])->scopeQuery(function ($query) use($id){
+        $user = $this->repository->skipPresenter(false)->with($this->with)->scopeQuery(function ($query) use($id){
             return $query->where('id', '=', $id);
         })->paginate();
 
